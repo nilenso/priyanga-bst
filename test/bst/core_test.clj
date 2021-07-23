@@ -1,6 +1,6 @@
 (ns bst.core-test
   (:require [clojure.test :refer [deftest testing is]]
-            [bst.core :refer [create-bst height factor]]))
+            [bst.core :refer [create-bst height factor balance]]))
 
 (deftest create-bst-test
   (let [expected-tree {:root 2
@@ -20,7 +20,7 @@
                         :left {:root 5, :left nil, :right nil}
                         :right {:root 9, :left nil, :right nil}}}
         expected-height 3]
-    (testing "create-bst failed"
+    (testing "height failed"
       (is (= expected-height (height tree))))))
 
 (deftest factor-test
@@ -31,5 +31,6 @@
                :left {:root 5, :left nil, :right nil}
                :right {:root 9, :left nil, :right nil}}}
         expected-factor -1]
-    (testing "create-bst failed"
+    (testing "height failed"
       (is (= expected-factor (factor tree))))))
+
