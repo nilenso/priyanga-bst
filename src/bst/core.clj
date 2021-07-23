@@ -159,7 +159,7 @@
     (+ 1 (count left) (count right))
     0))
 
-(def file-path "/Users/priyangapkini/Clojure/Learning/problems/bst/text.txt")
+(def file-path "/Users/priyangapkini/Clojure/BST/src/bst/text.txt")
 
 (def file-content (read-file file-path))
 
