@@ -1,6 +1,6 @@
 (ns bst.core-test
   (:require [clojure.test :refer [deftest testing is]]
-            [bst.core :refer [create-bst height factor has? min-node]]))
+            [bst.core :refer [create-bst height factor has? min-node insert-node]]))
 
 (deftest create-bst-test
   (let [expected-tree {:root 2
@@ -54,4 +54,21 @@
                :right {:root 9, :left nil, :right nil}}}]
     (testing "min-node failed"
       (is (= 1 (min-node tree))))))
+
+(deftest insert-node-test
+  (let [tree {:root 2
+              :left {:root 1, :left nil, :right nil}
+              :right
+              {:root 7
+               :left {:root 5, :left nil, :right nil}
+               :right {:root 9, :left nil, :right nil}}}
+        expected-tree {:root 5, 
+                       :left {:root 2, 
+                              :left {:root 1,  :left nil :right nil}, 
+                              :right {:root 3, :left nil, :right nil}}, 
+                       :right {:root 7, 
+                               :left nil, 
+                               :right {:root 9, :left nil, :right nil}}}]
+    (testing "insert-node failed"
+      (is (= expected-tree (insert-node tree 3))))))
 

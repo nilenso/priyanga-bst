@@ -163,9 +163,3 @@
   [file-path]
   (read-file file-path))
 
-(prn balance {:root 2
-                        :left {:root 1, :left nil, :right nil}
-                        :right
-                        {:root 9
-                         :left {:root 5, :left nil, :right {:root 7, :left nil, :right nil}}
-                         :right nil}})
