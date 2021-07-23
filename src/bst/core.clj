@@ -159,7 +159,7 @@
     (+ 1 (count left) (count right))
     0))
 
-(def file-path "/Users/priyangapkini/Clojure/BST/src/bst/text.txt")
-
-(def file-content (read-file file-path))
+(defn get-file-content-as-vector 
+  [file-path]
+  (read-file file-path))
 
