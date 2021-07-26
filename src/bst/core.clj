@@ -27,8 +27,9 @@
 
 (defn factor
   "Returns the balance factor of root node of the given tree"
-  [{:keys [left right]}]
-  (- (height left) (height right)))
+  [{:keys [left right] :as tree}]
+  (when (not-empty tree)
+    (- (height left) (height right))))
 
 (defn is-left-case?
   "Returns true if left subtree is imbalanced else false"
