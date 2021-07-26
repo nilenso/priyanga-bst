@@ -96,19 +96,34 @@
         (is (= nil (min-node (tree 2))))))))
 
 (deftest insert-node-test
-  (let [tree {:root 2
-              :left {:root 1, :left nil, :right nil}
-              :right
-              {:root 7
-               :left {:root 5, :left nil, :right nil}
-               :right {:root 9, :left nil, :right nil}}}
-        expected-tree {:root 5, 
-                       :left {:root 2, 
-                              :left {:root 1,  :left nil :right nil}, 
-                              :right {:root 3, :left nil, :right nil}}, 
-                       :right {:root 7, 
-                               :left nil, 
-                               :right {:root 9, :left nil, :right nil}}}]
-    (testing "insert-node failed"
-      (is (= expected-tree (insert-node tree 3))))))
+  (let [tree [{:root 2
+               :left {:root 1, :left nil, :right nil}
+               :right
+               {:root 7
+                :left {:root 5, :left nil, :right nil}
+                :right {:root 9, :left nil, :right nil}}}
+              
+              {:root 2 :left nil :right nil}
+              
+              {}]
+        expected-tree [{:root 5
+                        :left {:root 2
+                               :left {:root 1,  :left nil :right nil}
+                               :right {:root 3, :left nil, :right nil}}
+                        :right {:root 7
+                                :left nil
+                                :right {:root 9, :left nil, :right nil}}}
+                       
+                       {:root 2
+                        :left nil
+                        :right {:root 3 :left nil :right nil}}
+                       
+                       {:root 2 :left nil :right nil}]]
+    (testing "insert-node"
+      (testing "with non-empty tree"
+        (is (= (expected-tree 0) (insert-node (tree 0) 3))))
+      (testing "with root tree"
+        (is (= (expected-tree 1) (insert-node (tree 1) 3))))
+      (testing "with empty tree"
+        (is (= (expected-tree 2) (insert-node (tree 2) 2)))))))
 

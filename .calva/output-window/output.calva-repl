@@ -25,3 +25,5 @@ nil
 clj꞉bst.core꞉> 
 nil
 clj꞉bst.core꞉> 
+#'bst.core/remove-node
+clj꞉bst.core꞉> 
