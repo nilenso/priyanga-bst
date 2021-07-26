@@ -46,20 +46,24 @@
         (is (= (expected-height 2) (height (tree 2))))))))
 
 (deftest factor-test
-  (let [tree {:root 2
-              :left {:root 1, :left nil, :right nil}
-              :right
-              {:root 7
-               :left {:root 5, :left nil, :right nil}
-               :right {:root 9, :left nil, :right nil}}}
-        expected-factor -1]
-    (testing "Height"
+  (let [tree [{:root 2
+               :left {:root 1, :left nil, :right nil}
+               :right
+               {:root 7
+                :left {:root 5, :left nil, :right nil}
+                :right {:root 9, :left nil, :right nil}}}
+              
+              {:root 2, :left nil, :right nil} 
+
+              {}]
+        expected-factor [-1 0 nil]]
+    (testing "Factor"
       (testing "with non-empty tree (more than one node)"
-        (is (= expected-factor (factor tree))))
+        (is (= (expected-factor 0) (factor (tree 0)))))
+      (testing "with rooted-tree"
+        (is (= (expected-factor 1) (factor (tree 1)))))
       (testing "with empty tree"
-        (is (empty? (create-bst []))))
-      (testing "with empty list"
-        (is (empty? (create-bst [])))))))
+        (is (= (expected-factor 2) (factor (tree 2))))))))
 
   (deftest has?-test
     (let [tree {:root 2
