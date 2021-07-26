@@ -20,7 +20,7 @@
   "Returns height of the given tree"
   ([tree] (height tree 0))
   ([tree count]
-   (if tree
+   (if (not-empty tree)
      (max (height (:left tree) (inc count))
           (height (:right tree) (inc count)))
      count)))
