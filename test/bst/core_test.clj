@@ -1,129 +1,107 @@
 (ns bst.core-test
   (:require [clojure.test :refer [deftest testing is]]
-            [bst.core :refer [create-bst 
-                              height 
-                              factor 
-                              has? 
-                              min-node 
-                              insert-node 
-                              remove-node]]))
+            [bst.core :as bst]))
 
 (deftest create-bst-test
-  (let [expected-tree [{:root 2
-                        :left {:root 1, :left nil, :right nil}
-                        :right
-                        {:root 7
-                         :left {:root 5, :left nil, :right nil}
-                         :right {:root 9, :left nil, :right nil}}}
-                       
-                       {:root 2, :left nil, :right nil}]] 
-  (testing "Create-bst"
-    (testing "with list of integer values"
-      (is (= (expected-tree 0)(create-bst [2 1 9 5 7]))))
-    (testing "with one value"
-      (is (= (expected-tree 1) (create-bst [2]))))
-    (testing "with empty list"
-      (is (empty? (create-bst [])))))))
+  (testing "Creation of BST"
+    (testing "with a list of integers"
+      (is (= {:root 2
+              :left {:root 1 :left nil :right nil}
+              :right
+              {:root 7
+               :left {:root 5 :left nil :right nil}
+               :right {:root 9 :left nil :right nil}}}
+             (bst/create-bst [2 1 9 5 7]))))
+    (testing "with one integer"
+      (is (= {:root 2  :left nil :right nil}
+             (bst/create-bst [2]))))
+    (testing "with an empty list"
+      (is (empty? (bst/create-bst []))))))
 
 (deftest height-test
-  (let [tree [{:root 2
-               :left {:root 1, :left nil, :right nil}
-               :right
-               {:root 7
-                :left {:root 5, :left nil, :right nil}
-                :right {:root 9, :left nil, :right nil}}}
-              
-              {:root 2, :left nil, :right nil}
-              
-              {}]
-        expected-height [3 1 0]]
-    (testing "Height"
-      (testing "with non-empty tree (more than one node)"
-        (is (= (expected-height 0) (height (tree 0)))))
-      (testing "with root-tree"
-        (is (= (expected-height 1) (height (tree 1)))))
-      (testing "with empty tree"
-        (is (= (expected-height 2) (height (tree 2))))))))
+  (testing "Height of the BST"
+    (testing "with a non-empty tree (more than one node)"
+      (is (= 3 (bst/height {:root 2
+                            :left {:root 1, :left nil, :right nil}
+                            :right
+                            {:root 7
+                             :left {:root 5, :left nil, :right nil}
+                             :right {:root 9, :left nil, :right nil}}}))))
+    (testing "with one node"
+      (is (= 1 (bst/height {:root 2  :left nil :right nil}))))
+    (testing "with an empty tree"
+      (is (= 0 (bst/height {}))))))
 
 (deftest factor-test
-  (let [tree [{:root 2
-               :left {:root 1, :left nil, :right nil}
-               :right
-               {:root 7
-                :left {:root 5, :left nil, :right nil}
-                :right {:root 9, :left nil, :right nil}}}
-              
-              {:root 2, :left nil, :right nil} 
+  (testing "Balance factor of BST"
+    (testing "with a non-empty tree (more than one node)"
+      (is (= -1 (bst/factor {:root 2
+                             :left {:root 1 :left nil :right nil}
+                             :right
+                             {:root 7
+                              :left {:root 5 :left nil :right nil}
+                              :right {:root 9 :left nil :right nil}}}))))
+    (testing "with one node"
+      (is (= 0 (bst/factor {:root 2 :left nil :right nil}))))
+    (testing "with an empty tree"
+      (is (= nil (bst/factor {}))))))
 
-              {}]
-        expected-factor [-1 0 nil]]
-    (testing "Factor"
-      (testing "with non-empty tree (more than one node)"
-        (is (= (expected-factor 0) (factor (tree 0)))))
-      (testing "with root-tree"
-        (is (= (expected-factor 1) (factor (tree 1)))))
-      (testing "with empty tree"
-        (is (= (expected-factor 2) (factor (tree 2))))))))
+(deftest has?-test
+  (testing "Has a BST contain an integer"
+    (testing "with one present in the tree"
+      (is (= true (bst/has? {:root 2
+                             :left {:root 1 :left nil :right nil}
+                             :right
+                             {:root 7
+                              :left {:root 5 :left nil :right nil}
+                              :right {:root 9 :left nil :right nil}}}
+                            7)))
 
-  (deftest has?-test
-    (let [tree {:root 2
-                :left {:root 1, :left nil, :right nil}
-                :right
-                {:root 7
-                 :left {:root 5, :left nil, :right nil}
-                 :right {:root 9, :left nil, :right nil}}}]
-      (testing "has? failed"
-        (is (= true (has? tree 7)))
-        (is (= false (has? tree 3))))))
+      (testing "with one not present in the tree"
+        (is (= false (bst/has? {:root 2
+                                :left {:root 1 :left nil :right nil}
+                                :right
+                                {:root 7
+                                 :left {:root 5 :left nil :right nil}
+                                 :right {:root 9 :left nil :right nil}}}
+                               3)))))))
 
 (deftest min-node-test
-  (let [tree [{:root 2
-               :left {:root 1, :left nil, :right nil}
-               :right
-               {:root 7
-                :left {:root 5, :left nil, :right nil}
-                :right {:root 9, :left nil, :right nil}}}
-              
-              {:root 9 :left nil :right nil}
-              
-              {}]]
-    (testing "Min-node"
-      (testing "with non-empty tree" 
-        (is (= 1 (min-node (tree 0)))))
-      (testing "with root-tree"
-        (is (= 9 (min-node (tree 1)))))
-      (testing "with empty tree"
-        (is (= nil (min-node (tree 2))))))))
+  (testing "Minimum node of a BST"
+    (testing "with a non-empty tree"
+      (is (= 1 (bst/min-node {:root 2
+                              :left {:root 1, :left nil, :right nil}
+                              :right
+                              {:root 7
+                               :left {:root 5, :left nil, :right nil}
+                               :right {:root 9, :left nil, :right nil}}}))))
+    (testing "with one node"
+      (is (= 9 (bst/min-node {:root 9 :left nil :right nil}))))
+    (testing "with an empty tree"
+      (is (= nil (bst/min-node {}))))))
 
 (deftest insert-node-test
-  (let [tree [{:root 2
-               :left {:root 1, :left nil, :right nil}
-               :right
-               {:root 7
-                :left {:root 5, :left nil, :right nil}
-                :right {:root 9, :left nil, :right nil}}}
-              
-              {:root 2 :left nil :right nil}
-              
-              {}]
-        expected-tree [{:root 5
-                        :left {:root 2
-                               :left {:root 1,  :left nil :right nil}
-                               :right {:root 3, :left nil, :right nil}}
-                        :right {:root 7
-                                :left nil
+  (testing "Insertion of a new node"
+    (testing "with a non-empty tree"
+      (is (= {:root 5
+              :left {:root 2
+                     :left {:root 1,  :left nil :right nil}
+                     :right {:root 3, :left nil, :right nil}}
+              :right {:root 7
+                      :left nil
+                      :right {:root 9, :left nil, :right nil}}}
+             (bst/insert-node {:root 2
+                               :left {:root 1, :left nil, :right nil}
+                               :right
+                               {:root 7
+                                :left {:root 5, :left nil, :right nil}
                                 :right {:root 9, :left nil, :right nil}}}
-                       
-                       {:root 2
-                        :left nil
-                        :right {:root 3 :left nil :right nil}}
-                       
-                       {:root 2 :left nil :right nil}]]
-    (testing "insert-node"
-      (testing "with non-empty tree"
-        (is (= (expected-tree 0) (insert-node (tree 0) 3))))
-      (testing "with root tree"
-        (is (= (expected-tree 1) (insert-node (tree 1) 3))))
-      (testing "with empty tree"
-        (is (= (expected-tree 2) (insert-node (tree 2) 2)))))))
-
+                              3)))
+      (testing "with  one node"
+        (is (= {:root 2
+                :left nil
+                :right {:root 3 :left nil :right nil}}
+               (bst/insert-node  {:root 2 :left nil :right nil}
+                                 3))))
+      (testing "with an empty tree"
+        (is (= {:root 2 :left nil :right nil} (bst/insert-node {} 2)))))))
