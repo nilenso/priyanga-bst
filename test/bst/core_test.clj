@@ -15,6 +15,7 @@
                         {:root 7
                          :left {:root 5, :left nil, :right nil}
                          :right {:root 9, :left nil, :right nil}}}
+                       
                        {:root 2, :left nil, :right nil}]] 
   (testing "Create-bst"
     (testing "with list of integer values"
@@ -25,37 +26,51 @@
       (is (empty? (create-bst [])))))))
 
 (deftest height-test
-  (let [tree {:root 2 
-              :left {:root 1, :left nil, :right nil}
-              :right 
-              {:root 7
+  (let [tree [{:root 2
+               :left {:root 1, :left nil, :right nil}
+               :right
+               {:root 7
                 :left {:root 5, :left nil, :right nil}
                 :right {:root 9, :left nil, :right nil}}}
-        expected-height 3]
-    (testing "height failed"
-      (is (= expected-height (height tree))))))
+              
+              {:root 2, :left nil, :right nil}
+              
+              {}]
+        expected-height [3 1 0]]
+    (testing "Height"
+      (testing "with non-empty tree (more than one node)"
+        (is (= (expected-height 0) (height (tree 0)))))
+      (testing "with root-tree"
+        (is (= (expected-height 1) (height (tree 1)))))
+      (testing "with empty tree"
+        (is (= (expected-height 2) (height (tree 2))))))))
 
 (deftest factor-test
   (let [tree {:root 2
               :left {:root 1, :left nil, :right nil}
               :right
-              {:root 7 
+              {:root 7
                :left {:root 5, :left nil, :right nil}
                :right {:root 9, :left nil, :right nil}}}
         expected-factor -1]
-    (testing "height failed"
-      (is (= expected-factor (factor tree))))))
+    (testing "Height"
+      (testing "with non-empty tree (more than one node)"
+        (is (= expected-factor (factor tree))))
+      (testing "with empty tree"
+        (is (empty? (create-bst []))))
+      (testing "with empty list"
+        (is (empty? (create-bst [])))))))
 
-(deftest has?-test
-  (let [tree {:root 2
-              :left {:root 1, :left nil, :right nil}
-              :right
-              {:root 7
-               :left {:root 5, :left nil, :right nil}
-               :right {:root 9, :left nil, :right nil}}}]
-    (testing "has? failed"
-      (is (= true (has? tree 7)))
-      (is (= false (has? tree 3))))))
+  (deftest has?-test
+    (let [tree {:root 2
+                :left {:root 1, :left nil, :right nil}
+                :right
+                {:root 7
+                 :left {:root 5, :left nil, :right nil}
+                 :right {:root 9, :left nil, :right nil}}}]
+      (testing "has? failed"
+        (is (= true (has? tree 7)))
+        (is (= false (has? tree 3))))))
 
 (deftest min-node-test
   (let [tree {:root 2
