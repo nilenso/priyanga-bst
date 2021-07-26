@@ -138,12 +138,15 @@
   [{:keys [root left right] :as tree} value]
   (cond
     (nil? tree) nil
-    (neg? (compare value root)) (update tree :left remove-node value)
-    (pos? (compare value root)) (update tree :right remove-node value)
+    (neg? (compare value root)) (balance
+                                 (update tree :left remove-node value))
+    (pos? (compare value root)) (balance
+                                 (update tree :right remove-node value))
     (nil? left) right
     (nil? right) left
     :else (let [min (min-node right)]
-            (-> (update tree :right remove-node min)
+            (-> (balance
+                 (update tree :right remove-node min))
                 (assoc :root min)))))
 
 (defn read-file
