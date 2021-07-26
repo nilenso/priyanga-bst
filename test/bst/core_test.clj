@@ -60,7 +60,7 @@
     (testing "Factor"
       (testing "with non-empty tree (more than one node)"
         (is (= (expected-factor 0) (factor (tree 0)))))
-      (testing "with rooted-tree"
+      (testing "with root-tree"
         (is (= (expected-factor 1) (factor (tree 1)))))
       (testing "with empty tree"
         (is (= (expected-factor 2) (factor (tree 2))))))))
@@ -77,14 +77,23 @@
         (is (= false (has? tree 3))))))
 
 (deftest min-node-test
-  (let [tree {:root 2
-              :left {:root 1, :left nil, :right nil}
-              :right
-              {:root 7
-               :left {:root 5, :left nil, :right nil}
-               :right {:root 9, :left nil, :right nil}}}]
-    (testing "min-node failed"
-      (is (= 1 (min-node tree))))))
+  (let [tree [{:root 2
+               :left {:root 1, :left nil, :right nil}
+               :right
+               {:root 7
+                :left {:root 5, :left nil, :right nil}
+                :right {:root 9, :left nil, :right nil}}}
+              
+              {:root 9 :left nil :right nil}
+              
+              {}]]
+    (testing "Min-node"
+      (testing "with non-empty tree" 
+        (is (= 1 (min-node (tree 0)))))
+      (testing "with root-tree"
+        (is (= 9 (min-node (tree 1)))))
+      (testing "with empty tree"
+        (is (= nil (min-node (tree 2))))))))
 
 (deftest insert-node-test
   (let [tree {:root 2
