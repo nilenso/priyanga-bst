@@ -104,7 +104,9 @@
                (bst/insert-node  {:root 2 :left nil :right nil}
                                  3))))
       (testing "with an empty tree"
-        (is (= {:root 2 :left nil :right nil} (bst/insert-node {} 2)))))))
+        (is (= {:root 2 :left nil :right nil} (bst/insert-node {} 2))))
+      (testing "with a non-empty tree and duplicate entry"
+        (is (= {:root 2 :left nil :right nil} (bst/insert-node {:root 2 :left nil :right nil} 2)))))))
 
 (deftest remove-node-test
   (testing "Removal  of a node from the BST"
@@ -126,6 +128,6 @@
                                3)))
       (testing "with one node"
         (is (= nil (bst/remove-node  {:root 2 :left nil :right nil}
-                                  2))))
+                                     2))))
       (testing "with an empty tree"
         (is (= nil (bst/remove-node {} 2)))))))
