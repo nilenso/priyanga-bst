@@ -138,7 +138,7 @@
   "Returns a tree after removing the given node from the given tree"
   [{:keys [root left right] :as tree} value]
   (cond
-    (not-empty tree) {}
+    (not-empty tree) nil
     (neg? (compare value root)) (balance
                                  (update tree :left remove-node value))
     (pos? (compare value root)) (balance
