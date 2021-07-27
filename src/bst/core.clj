@@ -69,27 +69,29 @@
 
 (defn rotate-left
   "Returns the left rotated tree "
-  [{:keys [root left right]}]
+  [{:keys [root left right] :as tree}]
   (let [pivot (:root right)
         left-pivot (:left right)
         right-pivot (:right right)]
-    {:root pivot
-     :left {:root root
-            :left left
-            :right left-pivot}
-     :right right-pivot}))
+    (if (empty? tree) {}
+        {:root pivot
+         :left {:root root
+                :left left
+                :right left-pivot}
+         :right right-pivot})))
 
 (defn rotate-right
   "Returns the right rotated tree"
-  [{:keys [root left right]}]
+  [{:keys [root left right] :as tree}]
   (let [pivot (:root left)
         left-pivot (:left left)
         right-pivot (:right left)]
-    {:root pivot
-     :left left-pivot
-     :right {:root root
-             :left right-pivot
-             :right right}}))
+    (if (empty? tree) {}
+        {:root pivot
+         :left left-pivot
+         :right {:root root
+                 :left right-pivot
+                 :right right}})))
 
 (defn balance
   "Returns a balanced bst"
