@@ -138,7 +138,7 @@
   "Returns a tree after removing the given node from the given tree"
   [{:keys [root left right] :as tree} value]
   (cond
-    (nil? tree) nil
+    (not-empty tree) {}
     (neg? (compare value root)) (balance
                                  (update tree :left remove-node value))
     (pos? (compare value root)) (balance
@@ -163,7 +163,6 @@
     (+ 1 (count left) (count right))
     0))
 
-(defn get-file-content-as-vector 
+(defn get-file-content-as-vector
   [file-path]
   (read-file file-path))
-
