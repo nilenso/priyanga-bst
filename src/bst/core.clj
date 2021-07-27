@@ -34,32 +34,38 @@
 (defn is-left-case?
   "Returns true if left subtree is imbalanced else false"
   [tree]
-  (> (factor tree) 1))
+  (if (empty? tree) false
+      (> (factor tree) 1)))
 
 (defn is-right-case?
   "Returns true if right sub tree is imbalanced else false"
   [tree]
-  (< (factor tree) -1))
+  (if (empty? tree) false
+      (< (factor tree) -1)))
 
 (defn is-left-right-case?
   "Returns true if right sub tree of left child is imbalanced else false"
   [tree]
-  (and (is-left-case? tree) (< (factor (:left tree)) 0)))
+  (if (empty? tree) false
+      (and (is-left-case? tree) (< (factor (:left tree)) 0))))
 
 (defn is-left-left-case?
   "Returns true if left sub tree of left child is imbalanced else false"
   [tree]
-  (and (is-left-case? tree) (> (factor (:left tree)) 0)))
+  (if (empty? tree) false
+      (and (is-left-case? tree) (> (factor (:left tree)) 0))))
 
 (defn is-right-right-case?
   "Returns true if right sub tree of right child is imbalanced else false"
   [tree]
-  (and (is-right-case? tree) (< (factor (:right tree)) 0)))
+  (if (empty? tree) false
+      (and (is-right-case? tree) (< (factor (:right tree)) 0))))
 
 (defn is-right-left-case?
   "Returns true if right sub tree of left child is imbalanced else false"
   [tree]
-  (and (is-right-case? tree) (> (factor (:right tree)) 0)))
+  (if (empty? tree) false
+      (and (is-right-case? tree) (> (factor (:right tree)) 0))))
 
 (defn rotate-left
   "Returns the left rotated tree "
@@ -138,7 +144,8 @@
   "Returns a tree after removing the given node from the given tree"
   [{:keys [root left right] :as tree} value]
   (cond
-    (not-empty tree) nil
+    (empty? tree) {}
+    (nil? tree) nil
     (neg? (compare value root)) (balance
                                  (update tree :left remove-node value))
     (pos? (compare value root)) (balance
