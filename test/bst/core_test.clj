@@ -188,10 +188,10 @@
   (testing "Does right subtree of left child violates the BST property"
     (testing "with a non-empty tree"
       (is (= true (bst/is-right-right-case? {:root 2
-                                            :left nil
-                                            :right {:root 5
-                                                    :left nil
-                                                    :right {:root 6 :left nil :right nil}}}))))
+                                             :left nil
+                                             :right {:root 5
+                                                     :left nil
+                                                     :right {:root 6 :left nil :right nil}}}))))
     (testing "with one node"
       (is (= false (bst/is-right-right-case? {:root 9 :left nil :right nil}))))
     (testing "with an empty tree"
@@ -201,11 +201,13 @@
   (testing "Does right subtree of left child violates the BST property"
     (testing "with a non-empty tree"
       (is (= true (bst/is-left-left-case? {:root 2
-                                            :left {:root 5
-                                                   :left {:root 4 :left nil :right nil}
-                                                   :right nil}
-                                            :right nil}))))
+                                           :left {:root 5
+                                                  :left {:root 4 :left nil :right nil}
+                                                  :right nil}
+                                           :right nil}))))
     (testing "with one node"
       (is (= false (bst/is-left-left-case? {:root 9 :left nil :right nil}))))
     (testing "with an empty tree"
       (is (= false (bst/is-left-left-case? {}))))))
+
+
