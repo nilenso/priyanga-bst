@@ -213,3 +213,26 @@
       (is (=  {:root nil, :left nil, :right {:root 9, :left nil, :right nil}} (bst/rotate-right {:root 9 :left nil :right nil}))))
     (testing "given an empty tree"
       (is (= {} (bst/rotate-right {}))))))
+
+(deftest balance-test
+  (testing "Balance a tree which violates BST properties")
+  (testing "with a non-empty imbalanced tree"
+    (is (=  {:root 5
+             :left {:root 2
+                    :left {:root 1 :left nil :right nil}
+                    :right nil}
+             :right {:root 7
+                     :left nil
+                     :right {:root 9, :left nil, :right nil}}}
+            (bst/balance {:root 2
+                          :left {:root 1 :left nil :right nil}
+                          :right {:root 5
+                                  :left nil
+                                  :right {:root 7
+                                          :left nil
+                                          :right {:root 9 :left nil :right nil}}}}))))
+  (testing "with a tree with one node"
+    (is (= {:root 2 :left nil :right nil}
+           (bst/balance {:root 2 :left nil :right nil}))))
+  (testing "with an empty tree"
+    (is (= {} (bst/balance {})))))
