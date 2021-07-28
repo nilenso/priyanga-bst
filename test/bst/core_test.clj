@@ -19,6 +19,7 @@
                                     :left nil
                                     :right {:root "testing" :left nil :right nil}}
                              :right {:root "used" :left nil :right nil}}})
+(def root-path  "/Users/priyangapkini/Clojure/bst/src/bst/")
 
 (deftest create-test
   (testing "Creation of BST"
@@ -250,22 +251,40 @@
                (bst/remove-node {} 2)))))))
 
 (deftest read-file-test
-  (let [root-path  "/Users/priyangapkini/Clojure/bst/src/bst/"]
-    (testing "Read the content of a file and returns the vector after spliting the content at whitespace"
-      (testing "with a non-empty file"
-        (is (= ["This" "is" "my" "text" "file"]
-               (bst/read-file
-                (str root-path "text1.txt")))))
-      (testing "with an empty file"
-        (is (= []
-               (bst/read-file
-                (str root-path "text2.txt"))))))))
+  (testing "Read the content of a file and returns the vector after spliting the content at whitespace"
+    (testing "with a non-empty file"
+      (is (= ["This" "is" "my" "text" "file"]
+             (bst/read-file
+              (str root-path "text.txt")))))
+    (testing "with an empty file"
+      (is (= []
+             (bst/read-file
+              (str root-path "text2.txt")))))))
 
 (deftest count-nodes-test
   (testing "Counts the number of nodes in a tree"
     (testing "with a non-empty tree"
-      (is (= 9 (bst/count-nodes test-word-tree))))
+      (is (= 9
+             (bst/count-nodes test-word-tree))))
     (testing "with a tree having one node"
-      (is (= 1 (bst/count-nodes {:root 2 :left nil :right nil}))))
+      (is (= 1
+             (bst/count-nodes {:root 2 :left nil :right nil}))))
     (testing "with an empty tree"
-      (is (= 0 (bst/count-nodes {}))))))
+      (is (= 0
+             (bst/count-nodes {}))))))
+
+(deftest count-words-test
+  (testing "Counts the number of unique words in a file"
+
+    (testing "with a non-empty file without duplicate words"
+      (is (= 5
+             (bst/count-words
+              (str root-path "text.txt")))))
+    (testing "with a non-empty file with duplicate words"
+      (is (= 9
+             (bst/count-words
+              (str root-path "text1.txt")))))
+    (testing "with an empty file"
+      (is (= 0
+             (bst/count-words
+              (str root-path "text2.txt")))))))
