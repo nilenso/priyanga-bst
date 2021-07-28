@@ -1,1 +1,1 @@
-This is my text file
+This is my text file and is used for testing.

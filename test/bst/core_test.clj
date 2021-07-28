@@ -8,16 +8,28 @@
                         :left {:root 5 :left nil :right nil}
                         :right {:root 9 :left nil :right nil}}})
 
-(deftest create-bst-test
+(def test-word-tree {:root "is"
+                     :left {:root "and"
+                            :left {:root "This" :left nil :right nil}
+                            :right {:root "file"
+                                    :left nil
+                                    :right {:root "for" :left nil :right nil}}}
+                     :right {:root "text"
+                             :left {:root "my"
+                                    :left nil
+                                    :right {:root "testing" :left nil :right nil}}
+                             :right {:root "used" :left nil :right nil}}})
+
+(deftest create-test
   (testing "Creation of BST"
     (testing "with a list of integers"
       (is (= test-tree
-             (bst/create-bst [2 1 9 5 7]))))
+             (bst/create [2 1 9 5 7]))))
     (testing "with one integer"
       (is (= {:root 2  :left nil :right nil}
-             (bst/create-bst [2]))))
+             (bst/create [2]))))
     (testing "with an empty list"
-      (is (empty? (bst/create-bst []))))))
+      (is (empty? (bst/create []))))))
 
 (deftest height-test
   (testing "Height of the BST"
@@ -239,12 +251,21 @@
 
 (deftest read-file-test
   (let [root-path  "/Users/priyangapkini/Clojure/bst/src/bst/"]
-  (testing "Read the content of a file and returns the vector after spliting the content at whitespace"
-    (testing "with a non-empty file"
-      (is (= ["This" "is" "my" "text" "file"]
-             (bst/read-file 
-              (str root-path "text1.txt")))))
-    (testing "with an empty file"
-      (is (= []
-           (bst/read-file
-            (str root-path "text2.txt"))))))))
+    (testing "Read the content of a file and returns the vector after spliting the content at whitespace"
+      (testing "with a non-empty file"
+        (is (= ["This" "is" "my" "text" "file"]
+               (bst/read-file
+                (str root-path "text1.txt")))))
+      (testing "with an empty file"
+        (is (= []
+               (bst/read-file
+                (str root-path "text2.txt"))))))))
+
+(deftest count-nodes-test
+  (testing "Counts the number of nodes in a tree"
+    (testing "with a non-empty tree"
+      (is (= 9 (bst/count-nodes test-word-tree))))
+    (testing "with a tree having one node"
+      (is (= 1 (bst/count-nodes {:root 2 :left nil :right nil}))))
+    (testing "with an empty tree"
+      (is (= 0 (bst/count-nodes {}))))))
