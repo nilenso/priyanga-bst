@@ -15,3 +15,6 @@ pom.xml.asc
 /output-window
 /output.calva-repl
 *.calva-repl
+
+##vscode
+workspace.code-workspace
