@@ -174,3 +174,42 @@
       (is (= false (bst/is-left-left-case? {:root 9 :left nil :right nil}))))
     (testing "with an empty tree"
       (is (= false (bst/is-left-left-case? {}))))))
+
+(deftest rotate-left-test
+  (testing "Roates a tree to left"
+    (testing "given a non-empty tree"
+      (is (= {:root 6
+              :left {:root 5
+                     :left nil
+                     :right {:root 7
+                             :left nil
+                             :right nil}}
+              :right nil}
+             (bst/rotate-left {:root 5
+                               :right {:root 6
+                                       :left {:root 7 :left nil :right nil}
+                                       :right nil}
+                               :left nil}))))
+    (testing "given tree with one node"
+      (is (= {:root nil
+              :left {:root 9 :left nil :right nil}
+              :right nil}
+             (bst/rotate-left {:root 9 :left nil :right nil}))))
+    (testing "given an empty tree"
+      (is (= {} (bst/rotate-left {}))))))
+
+(deftest rotate-right-test
+  (testing "Rotates a tree to right"
+    (testing "given a non-empty tree"
+      (is (= {:root 5
+              :left {:root 4  :left nil :right nil}
+              :right {:root 6 :left nil :right nil}}
+             (bst/rotate-right {:root 6
+                                :left {:root 5
+                                       :left {:root 4 :left nil :right nil}
+                                       :right nil}
+                                :right nil}))))
+    (testing "given a tree with one node"
+      (is (=  {:root nil, :left nil, :right {:root 9, :left nil, :right nil}} (bst/rotate-right {:root 9 :left nil :right nil}))))
+    (testing "given an empty tree"
+      (is (= {} (bst/rotate-right {}))))))
