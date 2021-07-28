@@ -236,3 +236,15 @@
       (testing "with an empty tree"
         (is (= {}
                (bst/remove-node {} 2)))))))
+
+(deftest read-file-test
+  (let [root-path  "/Users/priyangapkini/Clojure/bst/src/bst/"]
+  (testing "Read the content of a file and returns the vector after spliting the content at whitespace"
+    (testing "with a non-empty file"
+      (is (= ["This" "is" "my" "text" "file"]
+             (bst/read-file 
+              (str root-path "text1.txt")))))
+    (testing "with an empty file"
+      (is (= []
+           (bst/read-file
+            (str root-path "text2.txt"))))))))
