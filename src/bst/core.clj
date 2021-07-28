@@ -120,7 +120,7 @@
                                  (update tree :right insert-node value))
     :else tree))
 
-(defn create-bst
+(defn create
   "Returns a bst when given a list of node values "
   [values]
   (reduce insert-node {} values))
@@ -162,16 +162,21 @@
 (defn read-file
   "Returns a vector containing all the words in a file"
   [file-path]
-  (let [content (string/trim 
+  (let [content (string/trim
                  (slurp file-path))]
-    (if (empty? content) 
+    (if (empty? content)
       []
-      (string/split content #" "))))
+      (string/split content #"[\s+ \. \n]"))))
 
 (defn count-nodes
   "Returns the number of nodes in a tree"
   [{:keys [left right] :as tree}]
-  (if tree
-    (+ 1 (count left) (count right))
-    0))
+  (if (empty? tree)
+    0
+    (+ 1 (count-nodes left) (count-nodes right))))
+
+(defn count-words
+  "Returns the number of unique words in a file"
+  [file-path]
+  (count-nodes (create (read-file file-path))))
 
