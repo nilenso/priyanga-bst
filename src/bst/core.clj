@@ -162,10 +162,11 @@
 (defn read-file
   "Returns a vector containing all the words in a file"
   [file-path]
-  (let [content (slurp file-path)]
-    (string/split 
-     (string/trim content)
-     #" ")))
+  (let [content (string/trim 
+                 (slurp file-path))]
+    (if (empty? content) 
+      []
+      (string/split content #" "))))
 
 (defn count-nodes
   "Returns the number of nodes in a tree"
@@ -173,4 +174,4 @@
   (if tree
     (+ 1 (count left) (count right))
     0))
-    
+
