@@ -20,69 +20,78 @@
   "Returns height of the given tree"
   ([tree] (height tree 0))
   ([tree count]
-   (if tree
+   (if (not-empty tree)
      (max (height (:left tree) (inc count))
           (height (:right tree) (inc count)))
      count)))
 
 (defn factor
   "Returns the balance factor of root node of the given tree"
-  [{:keys [left right]}]
-  (- (height left) (height right)))
+  [{:keys [left right] :as tree}]
+  (when (not-empty tree)
+    (- (height left) (height right))))
 
 (defn is-left-case?
   "Returns true if left subtree is imbalanced else false"
   [tree]
-  (> (factor tree) 1))
+  (if (empty? tree) false
+      (> (factor tree) 1)))
 
 (defn is-right-case?
   "Returns true if right sub tree is imbalanced else false"
   [tree]
-  (< (factor tree) -1))
+  (if (empty? tree) false
+      (< (factor tree) -1)))
 
 (defn is-left-right-case?
   "Returns true if right sub tree of left child is imbalanced else false"
   [tree]
-  (and (is-left-case? tree) (< (factor (:left tree)) 0)))
+  (if (empty? tree) false
+      (and (is-left-case? tree) (< (factor (:left tree)) 0))))
 
 (defn is-left-left-case?
   "Returns true if left sub tree of left child is imbalanced else false"
   [tree]
-  (and (is-left-case? tree) (> (factor (:left tree)) 0)))
+  (if (empty? tree) false
+      (and (is-left-case? tree) (> (factor (:left tree)) 0))))
 
 (defn is-right-right-case?
   "Returns true if right sub tree of right child is imbalanced else false"
   [tree]
-  (and (is-right-case? tree) (< (factor (:right tree)) 0)))
+  (if (empty? tree) false
+      (and (is-right-case? tree) (< (factor (:right tree)) 0))))
 
 (defn is-right-left-case?
   "Returns true if right sub tree of left child is imbalanced else false"
   [tree]
-  (and (is-right-case? tree) (> (factor (:right tree)) 0)))
+  (if (empty? tree) false
+      (and (is-right-case? tree) (> (factor (:right tree)) 0))))
 
 (defn rotate-left
   "Returns the left rotated tree "
-  [{:keys [root left right]}]
+  [{:keys [root left right] :as tree}]
   (let [pivot (:root right)
         left-pivot (:left right)
         right-pivot (:right right)]
-    {:root pivot
-     :left {:root root
-            :left left
-            :right left-pivot}
-     :right right-pivot}))
+    (if (empty? tree) {}
+        {:root pivot
+         :left {:root root
+                :left left
+                :right left-pivot}
+         :right right-pivot})))
 
 (defn rotate-right
   "Returns the right rotated tree"
-  [{:keys [root left right]}]
+  [{:keys [root left right] :as tree}]
   (let [pivot (:root left)
         left-pivot (:left left)
         right-pivot (:right left)]
-    {:root pivot
-     :left left-pivot
-     :right {:root root
-             :left right-pivot
-             :right right}}))
+    (if (empty? tree) {}
+        {:root pivot
+         :left left-pivot
+         :right {:root root
+                 :left right-pivot
+                 :right right}})))
 
 (defn balance
   "Returns a balanced bst"
@@ -111,7 +120,7 @@
                                  (update tree :right insert-node value))
     :else tree))
 
-(defn create-bst
+(defn create
   "Returns a bst when given a list of node values "
   [values]
   (reduce insert-node {} values))
@@ -137,29 +146,37 @@
   "Returns a tree after removing the given node from the given tree"
   [{:keys [root left right] :as tree} value]
   (cond
+    (empty? tree) {}
     (nil? tree) nil
-    (neg? (compare value root)) (update tree :left remove-node value)
-    (pos? (compare value root)) (update tree :right remove-node value)
+    (neg? (compare value root)) (balance
+                                 (update tree :left remove-node value))
+    (pos? (compare value root)) (balance
+                                 (update tree :right remove-node value))
     (nil? left) right
     (nil? right) left
     :else (let [min (min-node right)]
-            (-> (update tree :right remove-node min)
+            (-> (balance
+                 (update tree :right remove-node min))
                 (assoc :root min)))))
 
 (defn read-file
   "Returns a vector containing all the words in a file"
   [file-path]
-  (let [content (slurp file-path)]
-    (string/split content #" ")))
+  (let [content (string/trim
+                 (slurp file-path))]
+    (if (empty? content)
+      []
+      (string/split content #"[\s+ \. \n]"))))
 
 (defn count-nodes
   "Returns the number of nodes in a tree"
   [{:keys [left right] :as tree}]
-  (if tree
-    (+ 1 (count left) (count right))
-    0))
+  (if (empty? tree)
+    0
+    (+ 1 (count-nodes left) (count-nodes right))))
 
-(def file-path "/Users/priyangapkini/Clojure/Learning/problems/bst/text.txt")
-
-(def file-content (read-file file-path))
+(defn count-words
+  "Returns the number of unique words in a file"
+  [file-path]
+  (count-nodes (create (read-file file-path))))
 

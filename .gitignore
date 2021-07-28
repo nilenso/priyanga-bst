@@ -11,3 +11,7 @@ pom.xml.asc
 /.prepl-port
 .hgignore
 .hg/
+/.calva
+/output-window
+/output.calva-repl
+*.calva-repl
