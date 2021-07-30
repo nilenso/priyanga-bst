@@ -31,84 +31,6 @@
   (when (not-empty tree)
     (- (height left) (height right))))
 
-(defn is-left-case?
-  "Returns true if left subtree is imbalanced else false"
-  [tree]
-  (if (empty? tree) false
-      (> (factor tree) 1)))
-
-(defn is-right-case?
-  "Returns true if right sub tree is imbalanced else false"
-  [tree]
-  (if (empty? tree) false
-      (< (factor tree) -1)))
-
-(defn is-left-right-case?
-  "Returns true if right sub tree of left child is imbalanced else false"
-  [tree]
-  (if (empty? tree) false
-      (and (is-left-case? tree) (< (factor (:left tree)) 0))))
-
-(defn is-left-left-case?
-  "Returns true if left sub tree of left child is imbalanced else false"
-  [tree]
-  (if (empty? tree) false
-      (and (is-left-case? tree) (> (factor (:left tree)) 0))))
-
-(defn is-right-right-case?
-  "Returns true if right sub tree of right child is imbalanced else false"
-  [tree]
-  (if (empty? tree) false
-      (and (is-right-case? tree) (< (factor (:right tree)) 0))))
-
-(defn is-right-left-case?
-  "Returns true if right sub tree of left child is imbalanced else false"
-  [tree]
-  (if (empty? tree) false
-      (and (is-right-case? tree) (> (factor (:right tree)) 0))))
-
-(defn rotate-left
-  "Returns the left rotated tree "
-  [{:keys [root left right] :as tree}]
-  (let [pivot (:root right)
-        left-pivot (:left right)
-        right-pivot (:right right)]
-    (if (empty? tree) {}
-        {:root pivot
-         :left {:root root
-                :left left
-                :right left-pivot}
-         :right right-pivot})))
-
-(defn rotate-right
-  "Returns the right rotated tree"
-  [{:keys [root left right] :as tree}]
-  (let [pivot (:root left)
-        left-pivot (:left left)
-        right-pivot (:right left)]
-    (if (empty? tree) {}
-        {:root pivot
-         :left left-pivot
-         :right {:root root
-                 :left right-pivot
-                 :right right}})))
-
-(defn balance-subtree
-  "Returns a balanced bst"
-  [{:keys [left right] :as tree}]
-  (cond
-    (is-right-left-case? tree) (rotate-left
-                                (assoc tree :right (rotate-right right)))
-
-    (is-left-right-case? tree) (rotate-right
-                                (assoc tree :left (rotate-left left)))
-
-    (is-right-right-case? tree) (rotate-left tree)
-
-    (is-left-left-case? tree) (rotate-right tree)
-
-    :else tree))
-
 (defn insert-node
   "Returns a bst after inserting a new node"
   [{:keys [root] :as tree} value]
@@ -169,15 +91,12 @@
   (cond
     (empty? tree) {}
     (nil? tree) nil
-    (neg? (compare value root)) (balance-subtree
-                                 (update tree :left remove-node value))
-    (pos? (compare value root)) (balance-subtree
-                                 (update tree :right remove-node value))
+    (neg? (compare value root)) (update tree :left remove-node value)
+    (pos? (compare value root)) (update tree :right remove-node value)
     (nil? left) right
     (nil? right) left
     :else (let [min (min-node right)]
-            (-> (balance-subtree
-                 (update tree :right remove-node min))
+            (->(update tree :right remove-node min)
                 (assoc :root min)))))
 
 (def remove-and-balance #((comp balance remove-node) %1 %2))
