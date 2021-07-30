@@ -93,7 +93,7 @@
                  :left right-pivot
                  :right right}})))
 
-(defn balance
+(defn balance-subtree
   "Returns a balanced bst"
   [{:keys [left right] :as tree}]
   (cond
@@ -109,22 +109,22 @@
 
     :else tree))
 
-(defn insert-node
+(defn insert-and-balance
   "Returns a bst after inserting a new node"
   [{:keys [root] :as tree} value]
   (cond
     (nil? root) {:root value :left nil :right nil}
-    (neg? (compare value root)) (balance
-                                 (update tree :left insert-node value))
-    (pos? (compare value root)) (balance
-                                 (update tree :right insert-node value))
+    (neg? (compare value root)) (balance-subtree
+                                 (update tree :left insert-and-balance value))
+    (pos? (compare value root)) (balance-subtree
+                                 (update tree :right insert-and-balance value))
     :else tree))
 
 (defn create
   "Returns a bst when given a list of node values "
   [values]
-  (reduce insert-node {} values))
-
+  (reduce insert-and-balance {} values))
+  
 (defn has?
   "Returns true if if a given integer is present in the tree else false"
   [{:keys [root left right]} value]
@@ -148,14 +148,14 @@
   (cond
     (empty? tree) {}
     (nil? tree) nil
-    (neg? (compare value root)) (balance
+    (neg? (compare value root)) (balance-subtree
                                  (update tree :left remove-node value))
-    (pos? (compare value root)) (balance
+    (pos? (compare value root)) (balance-subtree
                                  (update tree :right remove-node value))
     (nil? left) right
     (nil? right) left
     :else (let [min (min-node right)]
-            (-> (balance
+            (-> (balance-subtree
                  (update tree :right remove-node min))
                 (assoc :root min)))))
 

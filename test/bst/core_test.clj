@@ -19,6 +19,7 @@
                                     :left nil
                                     :right {:root "testing" :left nil :right nil}}
                              :right {:root "used" :left nil :right nil}}})
+                             
 (def root-path  "/Users/priyangapkini/Clojure/bst/src/bst/")
 
 (deftest create-test
@@ -185,29 +186,29 @@
       (is (= {} (bst/rotate-right {}))))))
 
 (deftest balance-test
-  (testing "Balance a tree which violates BST properties")
-  (testing "with a non-empty imbalanced tree"
-    (is (=  {:root 5
-             :left {:root 2
-                    :left {:root 1 :left nil :right nil}
-                    :right nil}
-             :right {:root 7
-                     :left nil
-                     :right {:root 9, :left nil, :right nil}}}
-            (bst/balance {:root 2
-                          :left {:root 1 :left nil :right nil}
-                          :right {:root 5
-                                  :left nil
-                                  :right {:root 7
-                                          :left nil
-                                          :right {:root 9 :left nil :right nil}}}}))))
+  (testing "Balance a tree which violates BST properties"
+    (testing "with a non-empty imbalanced tree"
+      (is (=  {:root 5
+               :left {:root 2
+                      :left {:root 1 :left nil :right nil}
+                      :right nil}
+               :right {:root 7
+                       :left nil
+                       :right {:root 9, :left nil, :right nil}}}
+              (bst/balance-subtree {:root 2
+                            :left {:root 1 :left nil :right nil}
+                            :right {:root 5
+                                    :left nil
+                                    :right {:root 7
+                                            :left nil
+                                            :right {:root 9 :left nil :right nil}}}})))))
   (testing "with a tree with one node"
     (is (= {:root 2 :left nil :right nil}
-           (bst/balance {:root 2 :left nil :right nil}))))
+           (bst/balance-subtree {:root 2 :left nil :right nil}))))
   (testing "with an empty tree"
-    (is (= {} (bst/balance {})))))
+    (is (= {} (bst/balance-subtree {})))))
 
-(deftest insert-node-test
+(deftest insert-and-balance-test
   (testing "Insertion of a new node to a BST"
     (testing "with a non-empty tree"
       (is (= {:root 5
@@ -217,19 +218,19 @@
               :right {:root 7
                       :left nil
                       :right {:root 9, :left nil, :right nil}}}
-             (bst/insert-node test-tree 3)))
+             (bst/insert-and-balance test-tree 3)))
       (testing "with  one node"
         (is (= {:root 2
                 :left nil
                 :right {:root 3 :left nil :right nil}}
-               (bst/insert-node  {:root 2 :left nil :right nil}
+               (bst/insert-and-balance  {:root 2 :left nil :right nil}
                                  3))))
       (testing "with an empty tree"
         (is (= {:root 2 :left nil :right nil}
-               (bst/insert-node {} 2))))
+               (bst/insert-and-balance {} 2))))
       (testing "with a non-empty tree and duplicate entry"
         (is (= {:root 2 :left nil :right nil}
-               (bst/insert-node {:root 2 :left nil :right nil}
+               (bst/insert-and-balance {:root 2 :left nil :right nil}
                                 2)))))))
 
 (deftest remove-node-test
