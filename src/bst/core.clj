@@ -96,7 +96,7 @@
     (nil? left) right
     (nil? right) left
     :else (let [min (min-node right)]
-            (->(update tree :right remove-node min)
+            (-> (update tree :right remove-node min)
                 (assoc :root min)))))
 
 (def remove-and-balance #((comp balance remove-node) %1 %2))

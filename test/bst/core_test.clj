@@ -3,11 +3,11 @@
             [bst.core :as bst]))
 
 (def test-tree {:root 5
-                :left {:root 1 
-                       :left nil 
+                :left {:root 1
+                       :left nil
                        :right {:root 2 :left nil :right nil}}
-                :right {:root 7 
-                        :left nil 
+                :right {:root 7
+                        :left nil
                         :right {:root 9 :left nil :right nil}}})
 
 (def test-word-tree {:root "is"
@@ -75,7 +75,7 @@
     (testing "with a non-empty tree"
       (is (= {:root 5
               :left {:root 1
-                     :left nil 
+                     :left nil
                      :right {:root 2
                              :left nil
                              :right {:root 3 :left nil :right nil}}}
