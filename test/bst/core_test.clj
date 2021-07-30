@@ -2,10 +2,12 @@
   (:require [clojure.test :refer [deftest testing is]]
             [bst.core :as bst]))
 
-(def test-tree {:root 2
-                :left {:root 1 :left nil :right nil}
+(def test-tree {:root 5
+                :left {:root 1 
+                       :left nil 
+                       :right {:root 2 :left nil :right nil}}
                 :right {:root 7
-                        :left {:root 5 :left nil :right nil}
+                        :left nil
                         :right {:root 9 :left nil :right nil}}})
 
 (def test-word-tree {:root "is"
@@ -24,7 +26,7 @@
 
 (deftest create-test
   (testing "Creation of BST"
-    (testing "with a list of integers"
+    (testing "with a list of node values"
       (is (= test-tree
              (bst/create [2 1 9 5 7]))))
     (testing "with one integer"
@@ -45,7 +47,7 @@
 (deftest factor-test
   (testing "Balance factor of BST"
     (testing "with a non-empty tree (more than one node)"
-      (is (= -1 (bst/factor test-tree))))
+      (is (= 0 (bst/factor test-tree))))
     (testing "with one node"
       (is (= 0 (bst/factor {:root 2 :left nil :right nil}))))
     (testing "with an empty tree"
@@ -236,11 +238,9 @@
 (deftest remove-node-test
   (testing "Removal of a node from the BST"
     (testing "with a non-empty tree"
-      (is (= {:root 2
-              :left {:root 1 :left nil :right nil}
-              :right {:root 7
-                      :left {:root 5 :left nil :right nil}
-                      :right nil}}
+      (is (= {:root 5
+              :left {:root 1, :left nil, :right {:root 2, :left nil, :right nil}}
+              :right {:root 7, :left nil, :right nil}}
              (bst/remove-node  test-tree
                                9)))
       (testing "with one node"
