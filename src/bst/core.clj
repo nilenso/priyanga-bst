@@ -138,12 +138,14 @@
   (let [nodes (inorder-traversal tree)]
     (traverse-and-balance nodes 0 (- (count nodes) 1))))
 
+(def insert-and-balance #(reduce (comp balance insert-node) {} %))
+
 (defn create
   "Returns a bst when given a list of node values. If is-at-once is true then insert node and immediately 
   balance the bst else insert all nodes and then balance bst"
   [values]
-  (reduce (comp balance insert-node) {} values))
-  
+  (insert-and-balance values))
+
 (defn has?
   "Returns true if if a given integer is present in the tree else false"
   [{:keys [root left right]} value]
@@ -177,6 +179,8 @@
             (-> (balance-subtree
                  (update tree :right remove-node min))
                 (assoc :root min)))))
+
+(def remove-and-balance #((comp balance remove-node) %1 %2))
 
 (defn read-file
   "Returns a vector containing all the words in a file"
