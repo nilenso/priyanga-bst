@@ -120,10 +120,47 @@
                                  (update tree :right insert-and-balance value))
     :else tree))
 
+(defn insert-node
+  "Returns a bst after inserting a new node"
+  [{:keys [root] :as tree} value]
+  (cond
+    (nil? root) {:root value :left nil :right nil}
+    (neg? (compare value root)) (update tree :left insert-node value)
+    (pos? (compare value root)) (update tree :right insert-node value)
+    :else tree))
+
+(defn inorder-traversal
+  [{:keys [root left right] :as tree}]
+  (when (not (nil? tree))
+    (concat (inorder-traversal left) [root] (inorder-traversal right))))
+
+(defn traverse-and-balance
+  "Returns a balanced bst given a sorted list of node values"
+  ([nodes start  end]
+   (let [mid (int (/ (+ start end) 2))]
+     (when (<= start end)
+       {:root (nth nodes (int (/ (+ start end) 2)))
+        :left (traverse-and-balance nodes start (- mid 1))
+        :right (traverse-and-balance nodes (+ mid 1) end)}))))
+
+(defn balance
+  "Returns a balanced bst given an imabalanced bst"
+  [tree]
+  (let [nodes (inorder-traversal tree)]
+    (traverse-and-balance nodes 0 (- (count nodes) 1))))
+
 (defn create
-  "Returns a bst when given a list of node values "
-  [values]
-  (reduce insert-and-balance {} values))
+  "Returns a bst when given a list of node values. If is-at-once is true then insert node and immediately 
+  balance the bst else insert all nodes and then balance bst"
+  [values is-at-once]
+  (if is-at-once
+    (reduce insert-and-balance {} values)
+    (reduce (comp balance insert-node) {} values)))
+
+(pprint/pprint (create '(8 3 1 2 19 13 15 14) true))
+
+(pprint/pprint (create '(8 3 1 2 19 13 15 14) false))
+  
   
 (defn has?
   "Returns true if if a given integer is present in the tree else false"
@@ -178,5 +215,5 @@
 (defn count-words
   "Returns the number of unique words in a file"
   [file-path]
-  (count-nodes (create (read-file file-path))))
+  (count-nodes (create (read-file file-path) true)))
 
