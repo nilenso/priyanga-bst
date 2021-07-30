@@ -19,7 +19,7 @@
                                     :left nil
                                     :right {:root "testing" :left nil :right nil}}
                              :right {:root "used" :left nil :right nil}}})
-                             
+
 (def root-path  "/Users/priyangapkini/Clojure/bst/src/bst/")
 
 (deftest create-test
@@ -185,7 +185,7 @@
     (testing "given an empty tree"
       (is (= {} (bst/rotate-right {}))))))
 
-(deftest balance-test
+(deftest balance-subtree-test
   (testing "Balance a tree which violates BST properties"
     (testing "with a non-empty imbalanced tree"
       (is (=  {:root 5
