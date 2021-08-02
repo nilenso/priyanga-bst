@@ -22,7 +22,8 @@
                                     :right {:root "testing" :left nil :right nil}}
                              :right {:root "used" :left nil :right nil}}})
 
-(def root-path  "/Users/priyangapkini/Clojure/bst/src/bst/")
+(def root-path "/home/priyanga/Clojure/BST/priyanga-bst/src/bst/")
+  ;; "/Users/priyangapkini/Clojure/bst/src/bst/")
 
 (deftest create-test
   (testing "Creation of BST"
@@ -152,7 +153,69 @@
              (bst/count-words
               (str root-path "text2.txt")))))))
 
-(deftest inorder-traversal-test)
+(deftest inorder-traversal-test
+  (testing "Inorder traversal")
+  (testing "of a non-empty tree"
+    (is (=  [1 2 5 7 9]
+            (bst/inorder-traversal test-tree))))
+  (testing "of a tree with one node"
+    (is (= [2]
+           (bst/inorder-traversal {:root 2 :left nil :right nil}))))
+  (testing "of an empty tree"
+    (is (= [] (bst/inorder-traversal {})))))
 
-(deftest traverse-andbalance-test)
-(deftest balance-test)
+(deftest traverse-and-balance-test
+  (testing "Creates a balanced tree given a list of node values")
+  (testing "when the list is non-empty"
+    (is (= test-tree
+           (bst/traverse-and-balance [1 2 5 7 9] 0 4))))
+  (testing "when the list contains only one value"
+    (is (= {:root 2 :left nil :right nil}
+           (bst/traverse-and-balance [2] 0 0))))
+  (testing "when the list is empty"
+    (is (= {} (bst/traverse-and-balance [] 0 -1)))))
+
+(deftest balance-test
+  (testing "Balances a tree which violates BST properties")
+  (testing "when given a non-empty imbalanced tree "
+    (is (=  {:root 5
+             :left {:root 1 :left nil :right {:root 2 :left nil :right nil}}
+             :right {:root 7 :left nil :right {:root 9 :left nil :right nil}}}
+            (bst/balance {:root 2
+                          :left {:root 1 :left nil :right nil}
+                          :right {:root 5
+                                  :left nil
+                                  :right {:root 7
+                                          :left nil
+                                          :right {:root 9 :left nil :right nil}}}})))
+    (is (=  {:root 6
+             :left {:root 5 :left nil :right nil}
+             :right {:root 7 :left nil :right {:root 9 :left nil :right nil}}}
+            (bst/balance {:root 9
+                          :left {:root 7
+                                 :left {:root 5
+                                        :left nil
+                                        :right {:root 6 :left nil :right nil}}
+                                 :right nil}
+                          :right nil})))
+    (is (=  {:root 6
+             :left {:root 5 :left nil :right nil}
+             :right {:root 7 :left nil :right nil}}
+            (bst/balance {:root 2
+                          :left nil
+                          :right {:root 5
+                                  :left {:root 4 :left nil :right nil}
+                                  :right nil}})))
+    (is (=  {:root 6
+             :left {:root 5 :left nil :right nil}
+             :right {:root 7 :left nil :right nil}}
+            (bst/balance {:root 7
+                          :left {:root 5
+                                 :left nil
+                                 :right {:root 6 :left nil :right nil}}
+                          :right nil}))))
+  (testing "when given a tree with one node"
+    (is (= {:root 2 :left nil :right nil}
+           (bst/balance {:root 2 :left nil :right nil}))))
+  (testing "when given an empty tree"
+    (is (= {} (bst/balance {})))))

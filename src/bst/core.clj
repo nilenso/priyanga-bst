@@ -39,26 +39,34 @@
     (neg? (compare value root)) (update tree :left insert-node value)
     (pos? (compare value root)) (update tree :right insert-node value)
     :else tree))
-
+(declare create)
 (defn inorder-traversal
   [{:keys [root left right] :as tree}]
-  (when (not (nil? tree))
-    (concat (inorder-traversal left) [root] (inorder-traversal right))))
+  (cond (empty? tree) []
+        (some? tree)  (concat (inorder-traversal left)
+                              [root]
+                              (inorder-traversal right))))
 
 (defn traverse-and-balance
   "Returns a balanced bst given a sorted list of node values"
   ([nodes start  end]
-   (let [mid (int (/ (+ start end) 2))]
-     (when (<= start end)
-       {:root (nth nodes (int (/ (+ start end) 2)))
-        :left (traverse-and-balance nodes start (- mid 1))
-        :right (traverse-and-balance nodes (+ mid 1) end)}))))
+   (if (empty? nodes)
+     {}
+     (let [mid (int (/ (+ start end) 2))]
+       (when (<= start end)
+         {:root (nth nodes (int (/ (+ start end) 2)))
+          :left (traverse-and-balance nodes start (- mid 1))
+          :right (traverse-and-balance nodes (+ mid 1) end)})))))
 
 (defn balance
   "Returns a balanced bst given an imabalanced bst"
   [tree]
-  (let [nodes (inorder-traversal tree)]
-    (traverse-and-balance nodes 0 (- (count nodes) 1))))
+  (cond
+    (empty? tree) {}
+    (= 1 (count tree)) tree
+    :else
+    (let [nodes (inorder-traversal tree)]
+      (traverse-and-balance nodes 0 (- (count nodes) 1)))))
 
 (def insert-and-balance #(reduce (comp balance insert-node) {} %))
 
@@ -121,4 +129,3 @@
   "Returns the number of unique words in a file"
   [file-path]
   (count-nodes (create (read-file file-path))))
-
