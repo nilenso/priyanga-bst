@@ -27,7 +27,7 @@
                              :height 2}
                      :height 3})
 
-(def root-path  "/Users/priyangapkini/Clojure/bst/src/bst/")
+(def root-path  "./resources/test/")
 
 (deftest create-test
   (testing "Creation of BST"
@@ -95,8 +95,8 @@
     (testing "with a non-empty tree"
       (is (= true (bst/is-left-case? {:data 5
                                       :right nil
-                                      :left {:root 4
-                                             :left {:root 3 :left nil :right nil :height 0}
+                                      :left {:data 4
+                                             :left {:data 3 :left nil :right nil :height 0}
                                              :right nil
                                              :height 1}
                                       :height 2}))))
@@ -309,7 +309,7 @@
              (bst/count-nodes test-word-tree))))
     (testing "with a tree having one node"
       (is (= 1
-             (bst/count-nodes {:root 2 :left nil :right nil :height 0}))))
+             (bst/count-nodes {:data 2 :left nil :right nil :height 0}))))
     (testing "with an empty tree"
       (is (= 0
              (bst/count-nodes {}))))))
