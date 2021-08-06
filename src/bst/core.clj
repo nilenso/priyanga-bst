@@ -13,8 +13,7 @@
 ;; - Use your tree to find the count of the words in a huge text file
 
 (ns bst.core
-  (:require [clojure.string :as string]
-            [clojure.pprint :as pprint]))
+  (:require [clojure.string :as string]))
 
 (defn height
   "Returns height of the given tree"
@@ -71,13 +70,13 @@
 
 (defn rotate-left
   "Returns the left rotated tree "
-  [{:keys [root left right] :as tree}]
-  (let [pivot (:root right)
+  [{:keys [data left right] :as tree}]
+  (let [pivot (:data right)
         left-pivot (:left right)
         right-pivot (:right right)]
     (if (empty? tree) {}
-        (update-height {:root pivot
-                        :left {:root root
+        (update-height {:data pivot
+                        :left {:data data
                                :left left
                                :right left-pivot
                                :height (+ 1 (max (height left) (height left-pivot)))}
@@ -85,15 +84,15 @@
 
 (defn rotate-right
   "Returns the right rotated tree"
-  [{:keys [root left right] :as tree}]
-  (let [pivot (:root left)
+  [{:keys [data left right] :as tree}]
+  (let [pivot (:data left)
         left-pivot (:left left)
         right-pivot (:right left)]
     (if (empty? tree) {}
         (update-height
-         {:root pivot
+         {:data pivot
           :left left-pivot
-          :right {:root root
+          :right {:data data
                   :left right-pivot
                   :right right
                   :height (+ 1 (max (height right-pivot) (height right)))}}))))
@@ -116,15 +115,15 @@
 
 (defn insert-and-balance
   "Returns a bst after inserting a new node"
-  [{:keys [root left right] :as tree} value]
+  [{:keys [data left right] :as tree} value]
   (cond
-    (nil? root) {:root value :left nil :right nil :height 0}
-    (neg? (compare value root)) (balance-subtree
-                                 (update-height
-                                  (assoc tree :left (insert-and-balance left value))))
-    (pos? (compare value root))  (balance-subtree
-                                  (update-height
-                                   (assoc tree :right (insert-and-balance right value))))
+    (nil? data) {:data value :left nil :right nil :height 0}
+    (neg? (compare value data)) (-> (assoc tree :left (insert-and-balance left value))
+                                    update-height
+                                    balance-subtree)
+    (pos? (compare value data)) (-> (assoc tree :right (insert-and-balance right value))
+                                    update-height
+                                    balance-subtree)
     :else tree))
 
 (defn create
@@ -134,37 +133,37 @@
 
 (defn has?
   "Returns true if if a given integer is present in the tree else false"
-  [{:keys [root left right]} value]
+  [{:keys [data left right]} value]
   (cond
-    (nil? root) false
-    (= value root) true
-    (neg? (compare value root)) (has? left value)
+    (nil? data) false
+    (= value data) true
+    (neg? (compare value data)) (has? left value)
     :else (has? right value)))
 
 (defn min-node
   "Find the minimun value in a given tree"
-  [{:keys [root left] :as tree}]
+  [{:keys [data left] :as tree}]
   (cond
     (nil? tree) nil
-    (nil? left) root
+    (nil? left) data
     :else (min-node left)))
 
 (defn remove-node
   "Returns a tree after removing the given node from the given tree"
-  [{:keys [root left right] :as tree} value]
+  [{:keys [data left right] :as tree} value]
   (cond
     (empty? tree) {}
     (nil? tree) nil
-    (neg? (compare value root)) (balance-subtree
+    (neg? (compare value data)) (balance-subtree
                                  (update tree :left remove-node value))
-    (pos? (compare value root)) (balance-subtree
+    (pos? (compare value data)) (balance-subtree
                                  (update tree :right remove-node value))
     (nil? left) right
     (nil? right) left
     :else (let [min (min-node right)]
-            (-> (balance-subtree
-                 (update tree :right remove-node min))
-                (assoc :root min)))))
+            (->> (remove-node right min)
+                 (assoc tree :data min :right)
+                 balance-subtree))))
 
 (defn read-file
   "Returns a vector containing all the words in a file"
