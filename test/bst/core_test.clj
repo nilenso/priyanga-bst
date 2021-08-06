@@ -45,9 +45,7 @@
     (testing "with a non-empty tree (more than one node)"
       (is (= 2 (bst/height test-tree))))
     (testing "with one node"
-      (is (= 0 (bst/height {:data 2  :left nil :right nil :height 0}))))
-    (testing "with an empty tree"
-      (is (= -1 (bst/height {}))))))
+      (is (= 0 (bst/height {:data 2  :left nil :right nil :height 0}))))))
 
 (deftest factor-test
   (testing "Balance factor of BST"

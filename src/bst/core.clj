@@ -19,11 +19,7 @@
 (defn height
   "Returns height of the given tree"
   [tree]
-  (cond
-    (nil? tree) -1
-    (empty? tree) -1
-    :else
-    (:height tree)))
+  (:height tree))
 
 (defn factor
   "Returns the balance factor of root node of the given tree"
