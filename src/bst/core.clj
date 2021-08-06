@@ -13,7 +13,8 @@
 ;; - Use your tree to find the count of the words in a huge text file
 
 (ns bst.core
-  (:require [clojure.string :as string]))
+  (:require [clojure.string :as string])
+  (:refer-clojure :exclude [contains?]))
 
 (defn height
   "Returns height of the given tree"
@@ -131,14 +132,14 @@
   [values]
   (reduce insert-and-balance {} values))
 
-(defn has?
+(defn contains?
   "Returns true if if a given integer is present in the tree else false"
   [{:keys [data left right]} value]
   (cond
     (nil? data) false
     (= value data) true
-    (neg? (compare value data)) (has? left value)
-    :else (has? right value)))
+    (neg? (compare value data)) (contains? left value)
+    :else (contains? right value)))
 
 (defn min-node
   "Find the minimun value in a given tree"

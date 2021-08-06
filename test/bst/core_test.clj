@@ -58,13 +58,13 @@
     (testing "with an empty tree"
       (is (= nil (bst/factor {}))))))
 
-(deftest has?-test
+(deftest contains?-test
   (testing "Does BST contain the search key"
     (testing "when present in the tree"
-      (is (= true (bst/has? test-tree 7))))
+      (is (= true (bst/contains? test-tree 7))))
 
     (testing "when not present in the tree"
-      (is (= false (bst/has? test-tree 3))))))
+      (is (= false (bst/contains? test-tree 3))))))
 
 (deftest min-node-test
   (testing "Minimum node of a BST"
