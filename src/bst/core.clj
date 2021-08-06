@@ -114,15 +114,15 @@
 
     :else tree))
 
-(defn insert-and-balance
+(defn insert-node
   "Returns a bst after inserting a new node"
   [{:keys [data left right] :as tree} value]
   (cond
     (nil? data) {:data value :left nil :right nil :height 0}
-    (neg? (compare value data)) (-> (assoc tree :left (insert-and-balance left value))
+    (neg? (compare value data)) (-> (assoc tree :left (insert-node left value))
                                     update-height
                                     balance-subtree)
-    (pos? (compare value data)) (-> (assoc tree :right (insert-and-balance right value))
+    (pos? (compare value data)) (-> (assoc tree :right (insert-node right value))
                                     update-height
                                     balance-subtree)
     :else tree))
@@ -130,7 +130,7 @@
 (defn create
   "Returns a bst when given a list of node values"
   [values]
-  (reduce insert-and-balance {} values))
+  (reduce insert-node {} values))
 
 (defn contains?
   "Returns true if if a given integer is present in the tree else false"

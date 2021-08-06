@@ -246,7 +246,7 @@
   (testing "with an empty tree"
     (is (= {} (bst/balance-subtree {})))))
 
-(deftest insert-and-balance-test
+(deftest insert-node-test
   (testing "Insertion of a new node to a BST"
     (testing "with a non-empty tree"
       (is (= {:data 5
@@ -259,19 +259,19 @@
                       :right {:data 9 :left nil :right nil :height 0}
                       :height 1}
               :height 2}
-             (bst/insert-and-balance test-tree 3)))
+             (bst/insert-node test-tree 3)))
       (testing "with  one node"
         (is (= {:data 2
                 :left nil
                 :right {:data 3 :left nil :right nil :height 0}
                 :height 1}
-               (bst/insert-and-balance  {:data 2 :left nil :right nil :height 0} 3))))
+               (bst/insert-node  {:data 2 :left nil :right nil :height 0} 3))))
       (testing "with an empty tree"
         (is (= {:data 2 :left nil :right nil :height 0}
-               (bst/insert-and-balance {} 2))))
+               (bst/insert-node {} 2))))
       (testing "with a non-empty tree and duplicate entry"
         (is (= {:data 2 :left nil :right nil :height 0}
-               (bst/insert-and-balance {:data 2 :left nil :right nil :height 0} 2)))))))
+               (bst/insert-node {:data 2 :left nil :right nil :height 0} 2)))))))
 
 (deftest remove-node-test
   (testing "Removal of a node from the BST"
